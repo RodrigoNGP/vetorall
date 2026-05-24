@@ -1,0 +1,9 @@
+# Configurações locais do Claude Code (pessoal, não versionar)
+.claude/settings.local.json
+
+# Arquivos temporários/sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+img/_*.png
