@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfólio - Vetor&all</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+      background: #fff;
+    }
+
+    /* ── HEADER FIXO (mesmo do index) ── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #fff;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      padding-bottom: 16px;
+    }
+
+    .header-inner {
+      position: relative;
+      max-width: 880px;
+      margin: 0 auto;
+      line-height: 0;
+    }
+
+    .header-inner img {
+      width: 100%;
+      display: block;
+    }
+
+    .nav-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .nav-overlay a {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      color: transparent;
+      text-decoration: none;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .nav-overlay a:hover {
+      background: rgba(0, 108, 183, 0.08);
+      border-radius: 4px;
+    }
+
+    #header-spacer {
+      width: 100%;
+    }
+
+    /* ── SEÇÕES ── */
+    section {
+      width: 100%;
+      line-height: 0;
+      overflow: hidden;
+    }
+
+    section img {
+      display: block;
+    }
+
+    /* Hero: base.png em largura cheia */
+    #hero-portfolio img {
+      width: 100%;
+    }
+
+    /* Texto: imagem alta e estreita, centralizada na largura natural */
+    #texto-portfolio {
+      padding: 40px 16px 60px;
+      background: #fff;
+    }
+
+    #texto-portfolio img {
+      max-width: 866px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ── BOTÃO WHATSAPP FLUTUANTE ── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 999;
+      width: 58px;
+      height: 58px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .whatsapp-float svg {
+      width: 32px;
+      height: 32px;
+      fill: #fff;
+    }
+
+    /* ── SCROLL-TO-TOP ── */
+    .scroll-top {
+      position: fixed;
+      bottom: 100px;
+      right: 32px;
+      z-index: 999;
+      width: 42px;
+      height: 42px;
+      background: #006cb7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.3s ease, transform 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      border: none;
+      outline: none;
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .scroll-top:hover {
+      transform: scale(1.1);
+    }
+
+    .scroll-top svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="header-inner">
+      <img src="img/menu.png" alt="Vetor&all Projetos Integrados">
+      <nav class="nav-overlay" aria-label="Navegação principal">
+        <a href="index.html#inicio"    title="Início"      style="left:25%;width:9%">INÍCIO</a>
+        <a href="index.html#sobre"     title="Sobre"       style="left:34%;width:8.5%">SOBRE</a>
+        <a href="index.html#servicos"  title="Serviços"    style="left:42.5%;width:12%">SERVIÇOS</a>
+        <a href="index.html#bim"       title="Sistema BIM" style="left:54.5%;width:14%">SISTEMA BIM</a>
+        <a href="portfolio.html"       title="Portfólio"   style="left:68.5%;width:12.4%">PORTFÓLIO</a>
+        <a href="index.html#contato"   title="Contato"     style="left:80.9%;width:11.1%">CONTATO</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="header-spacer"></div>
+
+  <!-- ── HERO PORTFÓLIO ── -->
+  <section id="hero-portfolio">
+    <img src="img/base.png" alt="Portfólio Vetor&all">
+  </section>
+
+  <!-- ── TEXTO ── -->
+  <section id="texto-portfolio">
+    <img src="img/texto.png" alt="Descrição do projeto">
+  </section>
+
+  <!-- ── BOTÃO WHATSAPP ── -->
+  <a
+    href="https://wa.me/5581991131021"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="whatsapp-float"
+    title="Fale conosco pelo WhatsApp"
+    aria-label="WhatsApp"
+  >
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94
+        1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059
+        -.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371
+        -.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01
+        -.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198
+        2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719
+        2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87
+        9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001
+        -5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003
+        5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157
+        11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005
+        c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <!-- ── BOTÃO VOLTAR AO TOPO ── -->
+  <button class="scroll-top" id="scrollTop" title="Voltar ao topo" aria-label="Voltar ao topo">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 4l-8 8h5v8h6v-8h5z"/>
+    </svg>
+  </button>
+
+  <script>
+    const header = document.querySelector('header');
+    const spacer = document.getElementById('header-spacer');
+
+    function syncSpacer() {
+      const headerH = header.offsetHeight;
+      spacer.style.height = headerH + 'px';
+      document.documentElement.style.scrollPaddingTop = headerH + 'px';
+    }
+
+    syncSpacer();
+    window.addEventListener('resize', syncSpacer);
+    window.addEventListener('load', syncSpacer);
+    const menuImg = header.querySelector('img');
+    if (menuImg && !menuImg.complete) {
+      menuImg.addEventListener('load', syncSpacer);
+    }
+
+    const scrollTopBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        scrollTopBtn.classList.add('visible');
+      } else {
+        scrollTopBtn.classList.remove('visible');
+      }
+    });
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+
+</body>
+</html>

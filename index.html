@@ -35,7 +35,7 @@
 
     .header-inner {
       position: relative;
-      max-width: 1000px;   /* menu mais compacto (não amplia além disso) */
+      max-width: 880px;   /* menu mais compacto (não amplia além disso) */
       margin: 0 auto;
       line-height: 0;
     }
@@ -110,11 +110,25 @@
     /* Portfólio: amplia o conteúdo central, cortando os brancos das laterais. */
     #portfolio {
       overflow: hidden;
+      position: relative;
     }
 
     #portfolio img {
       width: 140%;
       margin-left: -20%;
+    }
+
+    /* botão "VEJA PORTFÓLIO COMPLETO" → leva para portfolio.html */
+    .portfolio-cta {
+      position: absolute;
+      display: block;
+      z-index: 2;
+      cursor: pointer;
+      border-radius: 999px;
+    }
+
+    .portfolio-cta:hover {
+      background: rgba(0, 108, 183, 0.1);
     }
 
     /* Sistema BIM: amplia o conteúdo central (fundo azul é largura cheia). */
@@ -187,7 +201,7 @@
       position: absolute;
       left: 40%;
       width: 19%;
-      top: 79%;
+      top: 74%;
       font-family: Arial, sans-serif;
       font-size: 0.95vw;
       text-align: center;
@@ -388,6 +402,8 @@
   <!-- ── PORTFÓLIO ── -->
   <section id="portfolio">
     <img src="img/portfolio.png" alt="Portfólio Vetor&all">
+    <a class="portfolio-cta" href="portfolio.html" title="Ver portfólio completo"
+       style="left:35.5%;width:29.2%;top:54.4%;height:8%"></a>
   </section>
 
   <!-- ── CONTATO ── -->
@@ -398,7 +414,7 @@
       <input type="email" name="email" required style="left:40%;width:19.1%;top:57.7%;height:2.7%" aria-label="E-mail" autocomplete="email">
       <input type="tel"   name="fone"          style="left:40%;width:19.1%;top:61%;height:2.6%"   aria-label="Fone" autocomplete="tel">
       <textarea name="mensagem" required style="left:40%;width:19.1%;top:64.2%;height:5.7%" aria-label="Mensagem"></textarea>
-      <button type="submit" style="left:40.4%;width:18.7%;top:75.3%;height:3.2%" aria-label="Enviar">Enviar</button>
+      <button type="submit" style="left:40.4%;width:18.7%;top:71.5%;height:2.2%" aria-label="Enviar">Enviar</button>
       <div id="formStatus"></div>
     </form>
     <iframe class="mapa-embed"
