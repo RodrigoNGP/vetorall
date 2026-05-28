@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfólio - Vetor&all</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -21,7 +24,7 @@
       background: #fff;
     }
 
-    /* ── HEADER FIXO (mesmo do index) ── */
+    /* ── HEADER FIXO (logo + nav real em HTML) ── */
     header {
       position: fixed;
       top: 0;
@@ -30,43 +33,66 @@
       z-index: 1000;
       background: #fff;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-      padding-bottom: 16px;
+      padding: 0 24px 14px;
     }
 
     .header-inner {
-      position: relative;
-      max-width: 880px;
+      width: fit-content;
+      max-width: 100%;
       margin: 0 auto;
-      line-height: 0;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      border-top: 4px solid #F5A100; /* linha laranja sobre o conteúdo */
+      padding-top: 14px;
     }
 
-    .header-inner img {
-      width: 100%;
+    .header-inner .logo {
       display: block;
+      flex-shrink: 0;
     }
 
-    .nav-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100%;
+    .header-inner .logo img {
+      display: block;
+      height: 72px;
+      width: auto;
+    }
+
+    .main-nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-nav li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .main-nav li:not(:last-child)::after {
+      content: '|';
+      color: #c8c8c8;
+      font-weight: 300;
       pointer-events: none;
     }
 
-    .nav-overlay a {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      color: transparent;
+    .main-nav a {
+      color: #1a3a5c;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.6px;
       text-decoration: none;
-      cursor: pointer;
-      pointer-events: auto;
+      white-space: nowrap;
+      transition: color 0.2s ease;
     }
 
-    .nav-overlay a:hover {
-      background: rgba(0, 108, 183, 0.08);
-      border-radius: 4px;
+    .main-nav a:hover {
+      color: #006cb7;
     }
 
     #header-spacer {
@@ -95,11 +121,25 @@
       background: #fff;
     }
 
-    #texto-portfolio img {
+    .texto-wrap {
+      position: relative;
       max-width: 866px;
-      width: 100%;
       margin: 0 auto;
     }
+
+    .texto-wrap img {
+      display: block;
+      width: 100%;
+    }
+
+    .proj-card {
+      position: absolute;
+      display: block;
+      z-index: 2;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
 
     /* ── BOTÃO WHATSAPP FLUTUANTE ── */
     .whatsapp-float {
@@ -170,17 +210,21 @@
 </head>
 <body>
 
-  <!-- ── HEADER ── -->
+  <!-- ── HEADER (logo + navegação em HTML real) ── -->
   <header>
     <div class="header-inner">
-      <img src="img/menu.png" alt="Vetor&all Projetos Integrados">
-      <nav class="nav-overlay" aria-label="Navegação principal">
-        <a href="index.html#inicio"    title="Início"      style="left:25%;width:9%">INÍCIO</a>
-        <a href="index.html#sobre"     title="Sobre"       style="left:34%;width:8.5%">SOBRE</a>
-        <a href="index.html#servicos"  title="Serviços"    style="left:42.5%;width:12%">SERVIÇOS</a>
-        <a href="index.html#bim"       title="Sistema BIM" style="left:54.5%;width:14%">SISTEMA BIM</a>
-        <a href="portfolio.html"       title="Portfólio"   style="left:68.5%;width:12.4%">PORTFÓLIO</a>
-        <a href="index.html#contato"   title="Contato"     style="left:80.9%;width:11.1%">CONTATO</a>
+      <a href="index.html" class="logo" aria-label="Vetor&all - Início">
+        <img src="img/logo.png" alt="Vetor&all - Projetos Integrados">
+      </a>
+      <nav class="main-nav" aria-label="Navegação principal">
+        <ul>
+          <li><a href="index.html#inicio">INÍCIO</a></li>
+          <li><a href="index.html#sobre">SOBRE</a></li>
+          <li><a href="index.html#servicos">SERVIÇOS</a></li>
+          <li><a href="index.html#bim">SISTEMA BIM</a></li>
+          <li><a href="portfolio.html" aria-current="page">PORTFÓLIO</a></li>
+          <li><a href="index.html#contato">CONTATO</a></li>
+        </ul>
       </nav>
     </div>
   </header>
@@ -192,9 +236,32 @@
     <img src="img/base.png" alt="Portfólio Vetor&all">
   </section>
 
-  <!-- ── TEXTO ── -->
+  <!-- ── TEXTO (9 cards de projetos, todos linkam para esta página) ── -->
   <section id="texto-portfolio">
-    <img src="img/texto.png" alt="Descrição do projeto">
+    <div class="texto-wrap">
+      <img src="img/texto.png" alt="Projetos: LIFECENTER, CAMINHO DAS ÁRVORES, MAX TULUM, CARUARU SHOPPING, JAZZ BOULEVART, UNIQUE, RESERVA PENINSULA, PATIO ORLA">
+      <!-- Linha 1 -->
+      <a class="proj-card" href="portfolio.html" title="LIFECENTER"
+         style="left:4%;width:26%;top:7.8%;height:25%"></a>
+      <a class="proj-card" href="portfolio.html" title="CAMINHO DAS ÁRVORES"
+         style="left:35%;width:26%;top:7.8%;height:25%"></a>
+      <a class="proj-card" href="portfolio.html" title="MAX TULUM"
+         style="left:66%;width:26%;top:7.8%;height:25%"></a>
+      <!-- Linha 2 -->
+      <a class="proj-card" href="portfolio.html" title="LIFECENTER"
+         style="left:4%;width:26%;top:37.8%;height:22%"></a>
+      <a class="proj-card" href="portfolio.html" title="CARUARU SHOPPING"
+         style="left:35%;width:26%;top:37.8%;height:22%"></a>
+      <a class="proj-card" href="portfolio.html" title="JAZZ BOULEVART"
+         style="left:66%;width:26%;top:37.8%;height:22%"></a>
+      <!-- Linha 3 -->
+      <a class="proj-card" href="portfolio.html" title="UNIQUE"
+         style="left:4%;width:26%;top:64.2%;height:25%"></a>
+      <a class="proj-card" href="portfolio.html" title="RESERVA PENINSULA"
+         style="left:35%;width:26%;top:64.2%;height:25%"></a>
+      <a class="proj-card" href="portfolio.html" title="PATIO ORLA"
+         style="left:66%;width:26%;top:64.2%;height:25%"></a>
+    </div>
   </section>
 
   <!-- ── BOTÃO WHATSAPP ── -->

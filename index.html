@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vetor&all - Projetos Integrados</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -21,7 +24,21 @@
       background: #fff;
     }
 
-    /* ── HEADER FIXO ── */
+    /* Conteúdo invisível visualmente mas lido por buscadores (SEO)
+       e leitores de tela (acessibilidade). */
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ── HEADER FIXO (logo + nav real em HTML) ── */
     header {
       position: fixed;
       top: 0;
@@ -30,46 +47,66 @@
       z-index: 1000;
       background: #fff;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-      padding-bottom: 16px; /* respiro abaixo do logo/menu */
+      padding: 0 24px 14px;
     }
 
     .header-inner {
-      position: relative;
-      max-width: 880px;   /* menu mais compacto (não amplia além disso) */
+      width: fit-content;
+      max-width: 100%;
       margin: 0 auto;
-      line-height: 0;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      border-top: 4px solid #F5A100; /* linha laranja sobre o conteúdo */
+      padding-top: 14px;
     }
 
-    .header-inner img {
-      width: 100%;
+    .header-inner .logo {
       display: block;
+      flex-shrink: 0;
     }
 
-    /* Links transparentes sobrepostos na área de navegação.
-       Cada link é posicionado por cima do texto correspondente da imagem. */
-    .nav-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      /* altura igual à da imagem do menu (não inclui o padding do header) */
-      height: 100%;
+    .header-inner .logo img {
+      display: block;
+      height: 72px;
+      width: auto;
+    }
+
+    .main-nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .main-nav li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .main-nav li:not(:last-child)::after {
+      content: '|';
+      color: #c8c8c8;
+      font-weight: 300;
       pointer-events: none;
     }
 
-    .nav-overlay a {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      color: transparent;
+    .main-nav a {
+      color: #1a3a5c;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.6px;
       text-decoration: none;
-      cursor: pointer;
-      pointer-events: auto;
+      white-space: nowrap;
+      transition: color 0.2s ease;
     }
 
-    .nav-overlay a:hover {
-      background: rgba(0, 108, 183, 0.08);
-      border-radius: 4px;
+    .main-nav a:hover {
+      color: #006cb7;
     }
 
     /* ── ESPAÇADOR DO HEADER ── */
@@ -127,9 +164,51 @@
       border-radius: 999px;
     }
 
-    .portfolio-cta:hover {
-      background: rgba(0, 108, 183, 0.1);
+
+    /* áreas clicáveis sobre os 3 cards de projeto */
+    .portfolio-card {
+      position: absolute;
+      display: block;
+      z-index: 2;
+      cursor: pointer;
+      border-radius: 8px;
     }
+
+    /* expansão dos 6 cards extras ao clicar em VEJA PORTFÓLIO COMPLETO */
+    #portfolio-extra {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s ease;
+      background: #fff;
+    }
+
+    #portfolio-extra.open {
+      max-height: 3000px; /* grande o suficiente para o conteúdo */
+    }
+
+    #portfolio-extra img {
+      display: block;
+      max-width: 866px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+      box-sizing: border-box;
+    }
+
+
+    /* rodapé: torna pai relativo para áreas clicáveis posicionadas */
+    footer {
+      position: relative;
+    }
+
+    .footer-link {
+      position: absolute;
+      display: block;
+      z-index: 2;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
 
     /* Sistema BIM: amplia o conteúdo central (fundo azul é largura cheia). */
     #bim {
@@ -225,10 +304,6 @@
       z-index: 2;
     }
 
-    .contato-link:hover {
-      background: rgba(0, 108, 183, 0.1);
-      border-radius: 4px;
-    }
 
     /* área clicável sobre o botão ASSISTA (abre o popup de vídeo) */
     .assista-btn {
@@ -354,17 +429,21 @@
 </head>
 <body>
 
-  <!-- ── HEADER ── -->
+  <!-- ── HEADER (logo + navegação em HTML real) ── -->
   <header id="inicio">
     <div class="header-inner">
-      <img src="img/menu.png" alt="Vetor&all Projetos Integrados">
-      <nav class="nav-overlay" aria-label="Navegação principal">
-        <a href="#inicio"    title="Início"      style="left:25%;width:9%">INÍCIO</a>
-        <a href="#sobre"     title="Sobre"       style="left:34%;width:8.5%">SOBRE</a>
-        <a href="#servicos"  title="Serviços"    style="left:42.5%;width:12%">SERVIÇOS</a>
-        <a href="#bim"       title="Sistema BIM" style="left:54.5%;width:14%">SISTEMA BIM</a>
-        <a href="#portfolio" title="Portfólio"   style="left:68.5%;width:12.4%">PORTFÓLIO</a>
-        <a href="#contato"   title="Contato"     style="left:80.9%;width:11.1%">CONTATO</a>
+      <a href="#inicio" class="logo" aria-label="Vetor&all - Início">
+        <img src="img/logo.png" alt="Vetor&all - Projetos Integrados">
+      </a>
+      <nav class="main-nav" aria-label="Navegação principal">
+        <ul>
+          <li><a href="#inicio">INÍCIO</a></li>
+          <li><a href="#sobre">SOBRE</a></li>
+          <li><a href="#servicos">SERVIÇOS</a></li>
+          <li><a href="#bim">SISTEMA BIM</a></li>
+          <li><a href="#portfolio">PORTFÓLIO</a></li>
+          <li><a href="#contato">CONTATO</a></li>
+        </ul>
       </nav>
     </div>
   </header>
@@ -381,17 +460,65 @@
 
   <!-- ── SOBRE ── -->
   <section id="sobre">
-    <img src="img/sobre.png" alt="Sobre Vetor&all">
+    <div class="visually-hidden">
+      <h2>Sobre - Vetor&all Projetos Integrados</h2>
+      <p>Uma empresa pernambucana, com mais de 10 anos no mercado, que tem como propósito simplificar e potencializar projetos de engenharia por meio de soluções integradas.</p>
+      <p>Atuamos de forma estratégica em todas as etapas, unindo conhecimento técnico, planejamento e visão de mercado para garantir eficiência, economia e segurança em cada entrega.</p>
+      <p>Mais do que executar projetos, buscamos entender o cenário de cada cliente para propor soluções inteligentes, viáveis e alinhadas aos objetivos do empreendimento. O acompanhamento é feito de perto e o cliente participa conosco de cada marco em uma jornada que se desenvolve no começo, meio e fim.</p>
+      <p>Quando você escolhe a Vetor&amp;All, você escolhe também:</p>
+      <ul>
+        <li>Atuação especializada em projetos complementares</li>
+        <li>Domínio de normas técnicas e exigências legais</li>
+        <li>Integração entre disciplinas</li>
+        <li>Foco em eficiência e redução de custos</li>
+        <li>Suporte técnico próximo ao cliente</li>
+      </ul>
+      <h3>Números da Vetor&amp;All</h3>
+      <ul>
+        <li>+22 milhões de m² projetados</li>
+        <li>Presente em 193 cidades do Brasil e do exterior</li>
+        <li>+700 projetos concluídos</li>
+        <li>17 anos de experiência multidisciplinar</li>
+      </ul>
+    </div>
+    <img src="img/sobre.png" alt="Sobre Vetor&all - empresa pernambucana com mais de 10 anos no mercado de projetos de engenharia">
   </section>
 
   <!-- ── SERVIÇOS ── -->
   <section id="servicos">
-    <img src="img/servicos.png" alt="Serviços Vetor&all">
+    <div class="visually-hidden">
+      <h2>Serviços</h2>
+      <ul>
+        <li>Projeto de Instalações Elétricas de Baixa Tensão</li>
+        <li>Projeto de Instalações Hidrossanitárias</li>
+        <li>Projeto de SPDA (Sistema de Proteção Contra Descargas Atmosféricas)</li>
+        <li>Projeto de Telefonia</li>
+        <li>Projeto de Cabeamento estruturado</li>
+        <li>Projeto de Subestação elétrica</li>
+        <li>Projeto de Múltiplas Unidades Consumidoras</li>
+        <li>Projeto de Prevenção e Combate a Incêndio</li>
+        <li>Projeto de Instalações de Gás</li>
+        <li>Projeto de Drenagem</li>
+      </ul>
+    </div>
+    <img src="img/servicos.png" alt="Serviços de engenharia oferecidos pela Vetor&all">
   </section>
 
   <!-- ── SISTEMA BIM ── -->
   <section id="bim">
-    <img src="img/bim.png" alt="Sistema BIM - Áreas de atuação">
+    <div class="visually-hidden">
+      <h2>Soluções - Sistema BIM</h2>
+      <h3>Áreas de atuação</h3>
+      <ul>
+        <li><strong>Projetos prediais:</strong> Mais controle e compatibilização para obras de maior complexidade.</li>
+        <li><strong>Industriais:</strong> Projetos integrados para o setor industrial.</li>
+        <li><strong>Comercial:</strong> Integração de sistemas com foco em conforto, segurança e economia.</li>
+        <li><strong>Residenciais e mistas:</strong> Sistemas integrados e com foco em conforto, economia e previsibilidade.</li>
+      </ul>
+      <p>Com o uso do BIM, integramos todas as disciplinas do projeto em um único modelo, permitindo maior controle, precisão e previsibilidade. O projeto deixa de ser apenas desenho e passa a ser uma simulação real da obra, permitindo identificar problemas antes da execução, reduzir custos e garantir mais segurança, além de reduzir conflitos entre sistemas, evitar retrabalho na obra e facilitar a aprovação nos órgãos reguladores. O BIM é um diferencial positivo e competitivo que faz a diferença na hora de escolher com quem fazer o seu projeto.</p>
+      <p>Na prática, isso significa: uma metodologia de modelagem da informação da construção que integra, em um ambiente digital, todas as disciplinas do projeto, permitindo compatibilização, análise e gestão mais eficiente ao longo de todo o ciclo da obra.</p>
+    </div>
+    <img src="img/bim.png" alt="Sistema BIM - Áreas de atuação: prediais, industriais, comercial, residenciais e mistas">
   </section>
 
   <!-- ── PARCEIROS ── -->
@@ -402,13 +529,46 @@
   <!-- ── PORTFÓLIO ── -->
   <section id="portfolio">
     <img src="img/portfolio.png" alt="Portfólio Vetor&all">
-    <a class="portfolio-cta" href="portfolio.html" title="Ver portfólio completo"
+    <a class="portfolio-cta" href="#portfolio-extra" title="Ver portfólio completo"
+       data-toggle="portfolio-extra"
        style="left:35.5%;width:29.2%;top:54.4%;height:8%"></a>
+    <!-- 3 cards de projeto (todos levam para portfolio.html) -->
+    <a class="portfolio-card" href="portfolio.html" title="Projeto LIFECENTER"
+       style="left:34.5%;width:9.5%;top:64.5%;height:27%"></a>
+    <a class="portfolio-card" href="portfolio.html" title="Projeto CAMINHO DAS ÁRVORES"
+       style="left:45.8%;width:9.7%;top:64.5%;height:27%"></a>
+    <a class="portfolio-card" href="portfolio.html" title="Projeto MAX TULUM"
+       style="left:57.3%;width:9.6%;top:64.5%;height:27%"></a>
+  </section>
+
+  <!-- ── PORTFÓLIO ESTENDIDO (expandido pelo botão "VEJA PORTFÓLIO COMPLETO") ── -->
+  <section id="portfolio-extra" aria-hidden="true">
+    <img src="img/texto_extra.png" alt="Mais projetos: LIFECENTER, CARUARU SHOPPING, JAZZ BOULEVART, UNIQUE, RESERVA PENINSULA, PATIO ORLA">
   </section>
 
   <!-- ── CONTATO ── -->
   <section id="contato">
-    <img src="img/contatos.png" alt="Contato Vetor&all">
+    <div class="visually-hidden">
+      <h2>Contato</h2>
+      <p>Fale com nossa equipe e garanta soluções técnicas seguras, compatibilizadas e prontas para execução.</p>
+      <p>Telefone: <a href="tel:+5581991131021">+55 81 9 9113-1021</a></p>
+      <h3>Como podemos ajudar no seu próximo projeto?</h3>
+      <p>Preencha o formulário e nossa equipe entrará em contato com você.</p>
+      <p>Se preferir, fale conosco diretamente através dos telefones:</p>
+      <ul>
+        <li>WhatsApp: <a href="https://wa.me/5581991131021">+55 (81) 9 9113-1021</a></li>
+        <li>Instagram: <a href="https://instagram.com/vetoreall">instagram.com/vetoreall</a></li>
+        <li>LinkedIn: Vetor&amp;all Projetos Integrados</li>
+      </ul>
+      <address>
+        Avenida Agamenon Magalhães, 444 - Sala 616 / 11º andar.<br>
+        Maurício de Nassau. Caruaru-PE. CEP: 55012-290.
+      </address>
+      <h3>Trabalhe conosco</h3>
+      <p>Envie seu currículo e/ou portfólio atualizado para
+        <a href="mailto:contato@vetoreall.eng.br">contato@vetoreall.eng.br</a>.</p>
+    </div>
+    <img src="img/contatos.png" alt="Contato Vetor&all - endereço, telefone, WhatsApp, Instagram e e-mail">
     <form class="contato-form" id="contatoForm">
       <input type="text"  name="nome"  required style="left:40%;width:19.1%;top:54.4%;height:2.7%" aria-label="Nome" autocomplete="name">
       <input type="email" name="email" required style="left:40%;width:19.1%;top:57.7%;height:2.7%" aria-label="E-mail" autocomplete="email">
@@ -436,6 +596,20 @@
   <!-- ── RODAPÉ ── -->
   <footer>
     <img src="img/rodape.png" alt="Rodapé Vetor&all">
+    <!-- Coluna de navegação -->
+    <a class="footer-link" href="#inicio"     title="Início"    style="left:44.7%;width:3.5%;top:23%;height:8%"></a>
+    <a class="footer-link" href="#sobre"      title="Sobre"     style="left:44.7%;width:3.5%;top:31%;height:8%"></a>
+    <a class="footer-link" href="#servicos"   title="Serviços"  style="left:44.7%;width:3.5%;top:39%;height:8%"></a>
+    <a class="footer-link" href="#portfolio"  title="Portfólio" style="left:44.7%;width:3.5%;top:47%;height:8%"></a>
+    <!-- VAGAS pulado conforme solicitado -->
+    <a class="footer-link" href="#contato"    title="Contato"   style="left:44.7%;width:3.5%;top:63%;height:8%"></a>
+    <!-- Redes sociais -->
+    <a class="footer-link" href="https://wa.me/5581991131021" target="_blank" rel="noopener noreferrer" title="WhatsApp"   style="left:48.6%;width:3.5%;top:23%;height:8%"></a>
+    <a class="footer-link" href="https://instagram.com/vetoreall" target="_blank" rel="noopener noreferrer" title="Instagram" style="left:48.6%;width:3.5%;top:31%;height:8%"></a>
+    <a class="footer-link" href="#"               title="Facebook (preencher URL)"        style="left:48.6%;width:3.5%;top:39%;height:8%"></a>
+    <!-- Telefone e e-mail -->
+    <a class="footer-link" href="tel:+558131360634"          title="Telefone" style="left:53.8%;width:7.6%;top:49%;height:8%"></a>
+    <a class="footer-link" href="mailto:contato@vetoreall.com.br" title="E-mail" style="left:53.8%;width:7.6%;top:63%;height:8%"></a>
   </footer>
 
   <!-- ── BOTÃO WHATSAPP ── -->
@@ -513,6 +687,30 @@
 
     scrollTopBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ── Expandir/recolher portfólio extra ──
+    document.querySelectorAll('[data-toggle]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById(el.dataset.toggle);
+        if (!target) return;
+        const isOpen = target.classList.toggle('open');
+        target.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        if (isOpen) {
+          setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+      });
+    });
+
+    // Clique fora da área expandida → recolhe
+    document.addEventListener('click', (e) => {
+      const target = document.getElementById('portfolio-extra');
+      if (!target || !target.classList.contains('open')) return;
+      if (target.contains(e.target)) return; // dentro = mantém
+      if (e.target.closest('[data-toggle="portfolio-extra"]')) return; // o próprio botão toggle
+      target.classList.remove('open');
+      target.setAttribute('aria-hidden', 'true');
     });
 
     // ── Popup de vídeo (botões ASSISTA) ──
