@@ -109,6 +109,85 @@
       color: #006cb7;
     }
 
+    /* botão hambúrguer (escondido no desktop, visível no mobile) */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: #1a3a5c;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-toggle svg {
+      width: 30px;
+      height: 30px;
+      display: block;
+    }
+
+    /* ── MOBILE: menu vira dropdown com hambúrguer ── */
+    @media (max-width: 768px) {
+      .header-inner {
+        width: 100%;
+        max-width: 100%;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .header-inner .logo img {
+        height: 56px;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .main-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        display: none;
+        border-top: 4px solid #F5A100;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+      }
+
+      .main-nav.open {
+        display: block;
+      }
+
+      .main-nav ul {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 8px 0;
+      }
+
+      .main-nav li {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+      }
+
+      .main-nav li:not(:last-child)::after {
+        display: none;
+      }
+
+      .main-nav a {
+        display: block;
+        padding: 14px 24px;
+        font-size: 15px;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .main-nav li:last-child a {
+        border-bottom: none;
+      }
+    }
+
     /* ── ESPAÇADOR DO HEADER ── */
     #header-spacer {
       width: 100%;
@@ -196,9 +275,21 @@
     }
 
 
-    /* rodapé: torna pai relativo para áreas clicáveis posicionadas */
+    /* rodapé: amplia o conteúdo central (mesma técnica de parceiros/portfólio).
+       Hotspots ficam dentro do wrapper escalado, então as % seguem batendo. */
     footer {
+      overflow: hidden;
+    }
+
+    .rodape-wrap {
       position: relative;
+      width: 140%;
+      margin-left: -20%;
+    }
+
+    .rodape-wrap img {
+      display: block;
+      width: 100%;
     }
 
     .footer-link {
@@ -435,7 +526,12 @@
       <a href="#inicio" class="logo" aria-label="Vetor&all - Início">
         <img src="img/logo.png" alt="Vetor&all - Projetos Integrados">
       </a>
-      <nav class="main-nav" aria-label="Navegação principal">
+      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="main-nav">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <nav class="main-nav" id="main-nav" aria-label="Navegação principal">
         <ul>
           <li><a href="#inicio">INÍCIO</a></li>
           <li><a href="#sobre">SOBRE</a></li>
@@ -595,21 +691,23 @@
 
   <!-- ── RODAPÉ ── -->
   <footer>
-    <img src="img/rodape.png" alt="Rodapé Vetor&all">
-    <!-- Coluna de navegação -->
-    <a class="footer-link" href="#inicio"     title="Início"    style="left:44.7%;width:3.5%;top:23%;height:8%"></a>
-    <a class="footer-link" href="#sobre"      title="Sobre"     style="left:44.7%;width:3.5%;top:31%;height:8%"></a>
-    <a class="footer-link" href="#servicos"   title="Serviços"  style="left:44.7%;width:3.5%;top:39%;height:8%"></a>
-    <a class="footer-link" href="#portfolio"  title="Portfólio" style="left:44.7%;width:3.5%;top:47%;height:8%"></a>
-    <!-- VAGAS pulado conforme solicitado -->
-    <a class="footer-link" href="#contato"    title="Contato"   style="left:44.7%;width:3.5%;top:63%;height:8%"></a>
-    <!-- Redes sociais -->
-    <a class="footer-link" href="https://wa.me/5581991131021" target="_blank" rel="noopener noreferrer" title="WhatsApp"   style="left:48.6%;width:3.5%;top:23%;height:8%"></a>
-    <a class="footer-link" href="https://instagram.com/vetoreall" target="_blank" rel="noopener noreferrer" title="Instagram" style="left:48.6%;width:3.5%;top:31%;height:8%"></a>
-    <a class="footer-link" href="#"               title="Facebook (preencher URL)"        style="left:48.6%;width:3.5%;top:39%;height:8%"></a>
-    <!-- Telefone e e-mail -->
-    <a class="footer-link" href="tel:+558131360634"          title="Telefone" style="left:53.8%;width:7.6%;top:49%;height:8%"></a>
-    <a class="footer-link" href="mailto:contato@vetoreall.com.br" title="E-mail" style="left:53.8%;width:7.6%;top:63%;height:8%"></a>
+    <div class="rodape-wrap">
+      <img src="img/rodape.png" alt="Rodapé Vetor&all">
+      <!-- Coluna de navegação -->
+      <a class="footer-link" href="#inicio"     title="Início"    style="left:44.7%;width:3.5%;top:23%;height:8%"></a>
+      <a class="footer-link" href="#sobre"      title="Sobre"     style="left:44.7%;width:3.5%;top:31%;height:8%"></a>
+      <a class="footer-link" href="#servicos"   title="Serviços"  style="left:44.7%;width:3.5%;top:39%;height:8%"></a>
+      <a class="footer-link" href="#portfolio"  title="Portfólio" style="left:44.7%;width:3.5%;top:47%;height:8%"></a>
+      <!-- VAGAS pulado conforme solicitado -->
+      <a class="footer-link" href="#contato"    title="Contato"   style="left:44.7%;width:3.5%;top:63%;height:8%"></a>
+      <!-- Redes sociais -->
+      <a class="footer-link" href="https://wa.me/5581991131021" target="_blank" rel="noopener noreferrer" title="WhatsApp"   style="left:48.6%;width:3.5%;top:23%;height:8%"></a>
+      <a class="footer-link" href="https://instagram.com/vetoreall" target="_blank" rel="noopener noreferrer" title="Instagram" style="left:48.6%;width:3.5%;top:31%;height:8%"></a>
+      <a class="footer-link" href="#"               title="Facebook (preencher URL)"        style="left:48.6%;width:3.5%;top:39%;height:8%"></a>
+      <!-- Telefone e e-mail -->
+      <a class="footer-link" href="tel:+558131360634"          title="Telefone" style="left:53.8%;width:7.6%;top:49%;height:8%"></a>
+      <a class="footer-link" href="mailto:contato@vetoreall.com.br" title="E-mail" style="left:53.8%;width:7.6%;top:63%;height:8%"></a>
+    </div>
   </footer>
 
   <!-- ── BOTÃO WHATSAPP ── -->
@@ -688,6 +786,30 @@
     scrollTopBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // ── Menu hambúrguer mobile ──
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    if (menuToggle && mainNav) {
+      menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = mainNav.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+      mainNav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          mainNav.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+      // fecha ao clicar fora
+      document.addEventListener('click', (e) => {
+        if (!mainNav.classList.contains('open')) return;
+        if (mainNav.contains(e.target) || menuToggle.contains(e.target)) return;
+        mainNav.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    }
 
     // ── Expandir/recolher portfólio extra ──
     document.querySelectorAll('[data-toggle]').forEach(el => {

@@ -95,6 +95,84 @@
       color: #006cb7;
     }
 
+    /* botão hambúrguer (escondido no desktop, visível no mobile) */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: #1a3a5c;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-toggle svg {
+      width: 30px;
+      height: 30px;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .header-inner {
+        width: 100%;
+        max-width: 100%;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .header-inner .logo img {
+        height: 56px;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .main-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        display: none;
+        border-top: 4px solid #F5A100;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+      }
+
+      .main-nav.open {
+        display: block;
+      }
+
+      .main-nav ul {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 8px 0;
+      }
+
+      .main-nav li {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+      }
+
+      .main-nav li:not(:last-child)::after {
+        display: none;
+      }
+
+      .main-nav a {
+        display: block;
+        padding: 14px 24px;
+        font-size: 15px;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .main-nav li:last-child a {
+        border-bottom: none;
+      }
+    }
+
     #header-spacer {
       width: 100%;
     }
@@ -216,7 +294,12 @@
       <a href="index.html" class="logo" aria-label="Vetor&all - Início">
         <img src="img/logo.png" alt="Vetor&all - Projetos Integrados">
       </a>
-      <nav class="main-nav" aria-label="Navegação principal">
+      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="main-nav">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <nav class="main-nav" id="main-nav" aria-label="Navegação principal">
         <ul>
           <li><a href="index.html#inicio">INÍCIO</a></li>
           <li><a href="index.html#sobre">SOBRE</a></li>
@@ -325,6 +408,29 @@
     scrollTopBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // ── Menu hambúrguer mobile ──
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    if (menuToggle && mainNav) {
+      menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = mainNav.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+      mainNav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          mainNav.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+      document.addEventListener('click', (e) => {
+        if (!mainNav.classList.contains('open')) return;
+        if (mainNav.contains(e.target) || menuToggle.contains(e.target)) return;
+        mainNav.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    }
   </script>
 
 </body>
