@@ -212,15 +212,47 @@
       width: 100%;
     }
 
-    /* Parceiros: logos ficam no centro da imagem com muita margem vazia.
-       Ampliamos a escala e recentralizamos; as laterais vazias são cortadas. */
+    /* Parceiros: carrossel infinito (marquee) com a faixa de logos
+       duplicada lado a lado. A animação translada -50% (uma cópia),
+       então quando termina a primeira, a segunda está exatamente
+       onde a primeira começou — loop perfeito. */
     #parceiros {
       overflow: hidden;
+      padding: 0 0 48px;
+      background: #fff;
     }
 
-    #parceiros img {
-      width: 180%;
-      margin-left: -40%;
+    .marquee {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 32s linear infinite;
+    }
+
+    .marquee-track img {
+      display: block;
+      height: 75px;
+      width: auto;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+      .marquee-track img {
+        height: 55px;
+      }
+    }
+
+    .marquee:hover .marquee-track {
+      animation-play-state: paused; /* pausa ao passar o mouse */
+    }
+
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-16.6667%); } /* -1/6 = uma cópia */
     }
 
     /* Portfólio: amplia o conteúdo central, cortando os brancos das laterais. */
@@ -255,23 +287,45 @@
 
     /* expansão dos 6 cards extras ao clicar em VEJA PORTFÓLIO COMPLETO */
     #portfolio-extra {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.6s ease;
+      display: none;
       background: #fff;
+      padding: 24px 16px 48px;
+      box-sizing: border-box;
+      animation: fade-in 0.4s ease;
     }
 
     #portfolio-extra.open {
-      max-height: 3000px; /* grande o suficiente para o conteúdo */
+      display: block;
     }
 
-    #portfolio-extra img {
-      display: block;
-      max-width: 866px;
-      width: 100%;
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .portfolio-extra-inner {
+      position: relative;
+      max-width: 600px;
       margin: 0 auto;
-      padding: 24px 16px 48px;
-      box-sizing: border-box;
+    }
+
+    .portfolio-extra-inner img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* área clicável sobre o botão MAIS PROJETOS → leva pra seção de contato */
+    .mais-projetos-btn {
+      position: absolute;
+      left: 6.5%;
+      width: 87%;
+      top: 94.5%;
+      height: 4%;
+      z-index: 2;
+      display: block;
+      cursor: pointer;
+      border-radius: 999px;
     }
 
 
@@ -364,6 +418,16 @@
       cursor: pointer;
       color: transparent;
       font-size: 0;
+    }
+
+    /* âncora invisível posicionada na altura do formulário */
+    .form-anchor {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      visibility: hidden;
     }
 
     /* mensagem de status do envio */
@@ -521,9 +585,9 @@
 <body>
 
   <!-- ── HEADER (logo + navegação em HTML real) ── -->
-  <header id="inicio">
+  <header>
     <div class="header-inner">
-      <a href="#inicio" class="logo" aria-label="Vetor&all - Início">
+      <a href="#destaque" class="logo" aria-label="Vetor&all - Início">
         <img src="img/logo.png" alt="Vetor&all - Projetos Integrados">
       </a>
       <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="main-nav">
@@ -533,7 +597,7 @@
       </button>
       <nav class="main-nav" id="main-nav" aria-label="Navegação principal">
         <ul>
-          <li><a href="#inicio">INÍCIO</a></li>
+          <li><a href="#destaque">INÍCIO</a></li>
           <li><a href="#sobre">SOBRE</a></li>
           <li><a href="#servicos">SERVIÇOS</a></li>
           <li><a href="#bim">SISTEMA BIM</a></li>
@@ -617,9 +681,18 @@
     <img src="img/bim.png" alt="Sistema BIM - Áreas de atuação: prediais, industriais, comercial, residenciais e mistas">
   </section>
 
-  <!-- ── PARCEIROS ── -->
-  <section id="parceiros">
-    <img src="img/parceiros.png" alt="Nossos parceiros">
+  <!-- ── PARCEIROS (carrossel infinito) ── -->
+  <section id="parceiros" aria-label="Nossos parceiros">
+    <div class="marquee">
+      <div class="marquee-track">
+        <img src="img/parceiros_logos.png" alt="Logos dos parceiros: HBR, GUSMÃO, ibis, MaxPlural, ORA e outros">
+        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
+        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
+        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
+        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
+        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
+      </div>
+    </div>
   </section>
 
   <!-- ── PORTFÓLIO ── -->
@@ -639,7 +712,10 @@
 
   <!-- ── PORTFÓLIO ESTENDIDO (expandido pelo botão "VEJA PORTFÓLIO COMPLETO") ── -->
   <section id="portfolio-extra" aria-hidden="true">
-    <img src="img/texto_extra.png" alt="Mais projetos: LIFECENTER, CARUARU SHOPPING, JAZZ BOULEVART, UNIQUE, RESERVA PENINSULA, PATIO ORLA">
+    <div class="portfolio-extra-inner">
+      <img src="img/texto.png" alt="Todos os projetos do portfólio Vetor&all">
+      <a class="mais-projetos-btn" href="#formulario" title="Ir para o formulário"></a>
+    </div>
   </section>
 
   <!-- ── CONTATO ── -->
@@ -673,6 +749,7 @@
       <button type="submit" style="left:40.4%;width:18.7%;top:71.5%;height:2.2%" aria-label="Enviar">Enviar</button>
       <div id="formStatus"></div>
     </form>
+    <span class="form-anchor" id="formulario" aria-hidden="true"></span>
     <iframe class="mapa-embed"
       title="Mapa Vetor&all"
       loading="lazy"
@@ -694,7 +771,7 @@
     <div class="rodape-wrap">
       <img src="img/rodape.png" alt="Rodapé Vetor&all">
       <!-- Coluna de navegação -->
-      <a class="footer-link" href="#inicio"     title="Início"    style="left:44.7%;width:3.5%;top:23%;height:8%"></a>
+      <a class="footer-link" href="#destaque"     title="Início"    style="left:44.7%;width:3.5%;top:23%;height:8%"></a>
       <a class="footer-link" href="#sobre"      title="Sobre"     style="left:44.7%;width:3.5%;top:31%;height:8%"></a>
       <a class="footer-link" href="#servicos"   title="Serviços"  style="left:44.7%;width:3.5%;top:39%;height:8%"></a>
       <a class="footer-link" href="#portfolio"  title="Portfólio" style="left:44.7%;width:3.5%;top:47%;height:8%"></a>
