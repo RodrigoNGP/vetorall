@@ -743,8 +743,10 @@
     <img src="img/contatos.png" alt="Contato Vetor&all - endereço, telefone, WhatsApp, Instagram e e-mail">
     <form class="contato-form" id="contatoForm">
       <input type="text"  name="nome"  required style="left:40%;width:19.1%;top:54.4%;height:2.7%" aria-label="Nome" autocomplete="name">
-      <input type="email" name="email" required style="left:40%;width:19.1%;top:57.7%;height:2.7%" aria-label="E-mail" autocomplete="email">
-      <input type="tel"   name="fone"          style="left:40%;width:19.1%;top:61%;height:2.6%"   aria-label="Fone" autocomplete="tel">
+      <input type="email" name="email" required style="left:40%;width:19.1%;top:57.7%;height:2.7%" aria-label="E-mail" autocomplete="email"
+        pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+        title="Digite um e-mail válido (ex: nome@dominio.com)">
+      <input type="tel"   name="fone"  id="foneInput" style="left:40%;width:19.1%;top:61%;height:2.6%"   aria-label="Telefone" autocomplete="tel" inputmode="numeric" maxlength="15">
       <textarea name="mensagem" required style="left:40%;width:19.1%;top:64.2%;height:5.7%" aria-label="Mensagem"></textarea>
       <button type="submit" style="left:40.4%;width:18.7%;top:71.5%;height:2.2%" aria-label="Enviar">Enviar</button>
       <div id="formStatus"></div>
@@ -781,6 +783,8 @@
       <a class="footer-link" href="https://wa.me/5581991131021" target="_blank" rel="noopener noreferrer" title="WhatsApp"   style="left:48.6%;width:3.5%;top:23%;height:8%"></a>
       <a class="footer-link" href="https://instagram.com/vetoreall" target="_blank" rel="noopener noreferrer" title="Instagram" style="left:48.6%;width:3.5%;top:31%;height:8%"></a>
       <a class="footer-link" href="#"               title="Facebook (preencher URL)"        style="left:48.6%;width:3.5%;top:39%;height:8%"></a>
+      <!-- Endereço (abre no Google Maps) -->
+      <a class="footer-link" href="https://www.google.com/maps/search/?api=1&query=Av.+Agamenon+Magalh%C3%A3es%2C+444%2C+Caruaru+-+PE" target="_blank" rel="noopener noreferrer" title="Ver no Google Maps" style="left:53.8%;width:7.6%;top:24%;height:22%"></a>
       <!-- Telefone e e-mail -->
       <a class="footer-link" href="tel:+558131360634"          title="Telefone" style="left:53.8%;width:7.6%;top:49%;height:8%"></a>
       <a class="footer-link" href="mailto:contato@vetoreall.com.br" title="E-mail" style="left:53.8%;width:7.6%;top:63%;height:8%"></a>
@@ -950,9 +954,27 @@
     videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeVideo(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideo(); });
 
-    // ── Formulário de contato → Google Sheets ──
-    // Cole aqui a URL do app da Web do Google Apps Script (ver instruções):
-    const FORM_ENDPOINT = '';
+    // ── Máscara de telefone brasileiro: (XX) XXXXX-XXXX ──
+    const foneInput = document.getElementById('foneInput');
+    if (foneInput) {
+      foneInput.addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+        if (v.length > 10) {
+          v = v.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+        } else if (v.length > 6) {
+          v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+        } else if (v.length > 2) {
+          v = v.replace(/^(\d{2})(\d*)/, '($1) $2');
+        }
+        e.target.value = v;
+      });
+    }
+
+    // ── Formulário de contato → FormSubmit (envia por email) ──
+    // O endpoint AJAX do FormSubmit aceita o email diretamente na URL.
+    // Na primeira submissão, FormSubmit envia um email de ativação;
+    // basta clicar no link para começar a receber as mensagens.
+    const FORM_ENDPOINT = 'https://formsubmit.co/ajax/contato@vetoreall.com.br';
 
     const contatoForm = document.getElementById('contatoForm');
     const formStatus = document.getElementById('formStatus');
@@ -961,28 +983,41 @@
       e.preventDefault();
       if (!contatoForm.reportValidity()) return;
 
-      if (!FORM_ENDPOINT) {
-        formStatus.style.color = '#c0392b';
-        formStatus.textContent = 'Formulário ainda não configurado.';
-        return;
-      }
-
       formStatus.style.color = '#555';
       formStatus.textContent = 'Enviando...';
 
+      const data = new FormData(contatoForm);
+      // metadados aceitos pelo FormSubmit
+      data.append('_subject', 'Novo contato pelo site Vetor&all');
+      data.append('_template', 'table');
+      data.append('_captcha', 'false');
+
       fetch(FORM_ENDPOINT, {
         method: 'POST',
-        mode: 'no-cors',
-        body: new FormData(contatoForm)
+        headers: { 'Accept': 'application/json' },
+        body: data
       })
-      .then(() => {
-        formStatus.style.color = '#1e7e34';
-        formStatus.textContent = 'Mensagem enviada! Em breve entraremos em contato.';
-        contatoForm.reset();
+      .then(async r => {
+        const text = await r.text();
+        let res;
+        try { res = JSON.parse(text); } catch { res = { raw: text }; }
+        console.log('FormSubmit response:', r.status, res);
+        return { ok: r.ok, status: r.status, res };
       })
-      .catch(() => {
+      .then(({ ok, status, res }) => {
+        if (ok && (res.success === 'true' || res.success === true)) {
+          formStatus.style.color = '#1e7e34';
+          formStatus.textContent = 'Mensagem enviada! Em breve entraremos em contato.';
+          contatoForm.reset();
+        } else {
+          formStatus.style.color = '#c0392b';
+          formStatus.textContent = res.message || `Erro (${status}). Veja o console.`;
+        }
+      })
+      .catch(err => {
+        console.error('Erro no envio do formulário:', err);
         formStatus.style.color = '#c0392b';
-        formStatus.textContent = 'Erro ao enviar. Tente pelo WhatsApp.';
+        formStatus.textContent = 'Erro de rede. Tente pelo WhatsApp.';
       });
     });
   </script>
