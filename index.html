@@ -229,20 +229,25 @@
 
     .marquee-track {
       display: flex;
+      align-items: center;
+      gap: 0;
       width: max-content;
-      animation: marquee-scroll 32s linear infinite;
+      animation: marquee-scroll 60s linear infinite;
     }
 
     .marquee-track img {
       display: block;
-      height: 75px;
+      height: 130px;
       width: auto;
       flex-shrink: 0;
     }
 
     @media (max-width: 768px) {
+      .marquee-track {
+        gap: 16px;
+      }
       .marquee-track img {
-        height: 55px;
+        height: 85px;
       }
     }
 
@@ -252,7 +257,7 @@
 
     @keyframes marquee-scroll {
       from { transform: translateX(0); }
-      to   { transform: translateX(-16.6667%); } /* -1/6 = uma cópia */
+      to   { transform: translateX(-33.3333%); } /* -1/3 = uma cópia */
     }
 
     /* Portfólio: amplia o conteúdo central, cortando os brancos das laterais. */
@@ -685,12 +690,9 @@
   <section id="parceiros" aria-label="Nossos parceiros">
     <div class="marquee">
       <div class="marquee-track">
-        <img src="img/parceiros_logos.png" alt="Logos dos parceiros: HBR, GUSMÃO, ibis, MaxPlural, ORA e outros">
-        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
-        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
-        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
-        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
-        <img src="img/parceiros_logos.png" alt="" aria-hidden="true">
+        <img src="img/logo_clientes.png" alt="Parceiros: AWA, CIVIL, HBR, GUSMÃO, ibis, MaxPlural, ORA, Viana e Moura, ARCONST, AZUR, BERG, CARUARU, CASA ORANGE, DOM, GÊNESI, MULT TÉCNICA, BONANZA, Veja, Tauá, SÁ, Gerisa e outros">
+        <img src="img/logo_clientes.png" alt="" aria-hidden="true">
+        <img src="img/logo_clientes.png" alt="" aria-hidden="true">
       </div>
     </div>
   </section>
